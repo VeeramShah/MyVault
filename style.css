@@ -9,13 +9,18 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: #0f111a;
+    /* This creates the subtle textured dot pattern */
+    background-image: radial-gradient(#232635 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    
     color: var(--text);
     font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
     display: flex;
     justify-content: center;
     padding: 40px 20px;
+    min-height: 100vh;
 }
 
 .container { 
@@ -74,7 +79,9 @@ h1 { text-align: center; color: var(--primary); margin-bottom: 30px; }
     background: var(--card-bg);
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    /* Stronger shadow to lift it off the textured background */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
+    border: 1px solid #232635;
     margin-bottom: 20px;
 }
 
@@ -283,4 +290,94 @@ input:focus {
 
 .eye-btn:hover {
     color: white;
+}
+
+/* --- NEW LAYOUT IMPROVEMENTS --- */
+
+/* 1. Fix the Search Bar Spacing */
+.search-bar {
+    margin-bottom: 25px;   /* Adds distinct space between search and list */
+    border: 1px solid #333;
+    background: #1a1c25;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Subtle shadow for depth */
+}
+
+/* 2. Enable Independent Scrolling for the List */
+.list-container {
+    /* This calculates height dynamically so it fits on most laptop screens */
+    height: 65vh; 
+    
+    /* This enables the internal scrolling */
+    overflow-y: auto; 
+    
+    /* Adds padding so content doesn't touch the scrollbar */
+    padding-right: 15px; 
+    padding-bottom: 20px;
+    padding-left: 5px;
+}
+
+/* 3. Custom Aesthetic Scrollbar (Dark Theme) */
+/* The background of the scrollbar path */
+.list-container::-webkit-scrollbar-track {
+    background: #0f111a; 
+    border-radius: 10px;
+}
+
+/* The scrollbar itself */
+.list-container::-webkit-scrollbar {
+    width: 8px; /* Slim and sleek */
+}
+
+/* The scrollbar handle (the moving part) */
+.list-container::-webkit-scrollbar-thumb {
+    background: #333; 
+    border-radius: 10px;
+}
+
+/* Hover effect on the scrollbar */
+.list-container::-webkit-scrollbar-thumb:hover {
+    background: var(--primary); /* Turns blue when you grab it */
+}
+
+/* --- LOGIN SCREEN SPACING FIXES --- */
+
+/* 1. Space under the "Unlock Vault" title */
+#login-section h3 {
+    margin-bottom: 30px;
+}
+
+/* 2. Space under "Enter Master Password" text */
+#status-text {
+    margin-bottom: 15px !important; /* Force space below text */
+    display: block;
+}
+
+/* 3. Improve the Password Input Area */
+.password-wrapper {
+    margin-bottom: 25px; /* Pushes the file loader down */
+}
+
+/* 4. Fix the "Load Data File" Section */
+.file-load-area {
+    background: #1a1c25;  /* Subtle dark background to separate it */
+    padding: 20px;        /* Internal padding */
+    border-radius: 8px;   /* Rounded corners */
+    border: 1px dashed #333; /* Dashed border to look like a "drop zone" */
+    margin-top: 20px;     /* Gap above this section */
+    margin-bottom: 25px;  /* Gap below this section (before button) */
+}
+
+/* 5. Separate the label "Load data file:" from the button */
+.file-load-area label {
+    display: block;       /* Forces label to be on its own line */
+    margin-bottom: 12px;  /* Space between text and the button */
+    font-weight: bold;
+    color: #82aaff;       /* Make label blue to stand out */
+}
+
+/* 6. Space above the "Change Password" link at the bottom */
+#login-section p:last-child {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #232635; /* Subtle divider line */
 }
