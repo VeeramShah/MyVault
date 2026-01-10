@@ -7,8 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to MyVault</h1>
-    <p>This is your personal offline vault.</p>
+    <div class="container">
+        <h1>MyVault</h1>
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('vault')">Password Vault</button>
+            <button class="tab-button" onclick="openTab('websites')">Website Saver</button>
+        </div>
+        <div id="vault" class="tab-content" style="display: block;">
+            <p>Password Vault content will go here.</p>
+        </div>
+        <div id="websites" class="tab-content" style="display: none;">
+            <p>Website Saver content will go here.</p>
+        </div>
+    </div>
     
     <script src="crypto.js"></script>
     <script src="app.js"></script>
