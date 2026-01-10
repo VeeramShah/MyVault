@@ -200,3 +200,18 @@ input:focus {
     border-color: var(--primary);
     outline: none;
 }
+
+.toast {
+    position: fixed;
+    top: -50px; /* Hidden above the screen */
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #0f111a;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: top 0.3s ease;
+    z-index: 1000;
+}
+.toast.show { top: 20px; } /* Slides down when shown */

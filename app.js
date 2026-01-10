@@ -21,7 +21,7 @@ async function unlockVault() {
         reader.readAsText(fileInput.files[0]);
     } else {
         // New Vault
-        if(confirm("No file selected. Create a new empty vault?")) showApp();
+        if (confirm("No file selected. Create a new empty vault?")) showApp();
     }
 }
 
@@ -49,7 +49,7 @@ function renderVault() {
     const search = document.getElementById('searchVault').value.toLowerCase();
     list.innerHTML = "";
     vaultData.passwords.forEach((item, index) => {
-        if(item.name.toLowerCase().includes(search)) {
+        if (item.name.toLowerCase().includes(search)) {
             list.innerHTML += `<div class="item-card">
                 <strong>${item.name}</strong><br>
                 User: ${item.user} | Pass: <code>${item.pass}</code><br>
@@ -68,12 +68,12 @@ function addWebsite() {
         cat: document.getElementById('webCat').value, // Gets the selected option
         desc: document.getElementById('webDesc').value // Gets the new description
     };
-    
-    if(!web.name || !web.url || !web.cat) return alert("Please fill Name, URL, and Category!");
-    
+
+    if (!web.name || !web.url || !web.cat) return alert("Please fill Name, URL, and Category!");
+
     vaultData.websites.push(web);
     renderWebsites();
-    
+
     // Clear the form
     document.getElementById('webName').value = "";
     document.getElementById('webUrl').value = "";
@@ -85,11 +85,11 @@ function renderWebsites() {
     const list = document.getElementById('websiteList');
     const search = document.getElementById('searchWeb').value.toLowerCase();
     list.innerHTML = "";
-    
+
     vaultData.websites.forEach((item, index) => {
-        if(item.name.toLowerCase().includes(search) || 
-           item.cat.toLowerCase().includes(search) || 
-           (item.desc && item.desc.toLowerCase().includes(search))) {
+        if (item.name.toLowerCase().includes(search) ||
+            item.cat.toLowerCase().includes(search) ||
+            (item.desc && item.desc.toLowerCase().includes(search))) {
             list.innerHTML += ` 
             <div class="item-card">
                 <div class="card-header">
@@ -97,10 +97,9 @@ function renderWebsites() {
                     <span class="tag">${item.cat}</span>
                 </div>
                 <p style="font-size: 0.9em; color: #888; margin: 5px 0 10px 0;">${item.desc || 'No description'}</p>
-                <div class="credential-row">
-                    <a href="${item.url}" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9em;">
-                        🔗 Visit Website
-                    </a>
+                <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                    <a href="${item.url}" target="_blank" class="accent-link">🔗 Visit</a>
+                    <button class="copy-btn" onclick="copyToClipboard('${item.url}')">Copy URL</button>
                 </div>
                 <button class="delete-btn" onclick="deleteItem('websites', index)" style="width: 100%; margin-top: 10px;">Delete</button>
             </div>`;
@@ -139,12 +138,12 @@ function addAccount() {
         desc: document.getElementById('accDesc').value, // NEW FIELD
         where: document.getElementById('accWhere').value
     };
-    
-    if(!acc.name || !acc.pass) return alert("Fill Name and Password!");
-    
+
+    if (!acc.name || !acc.pass) return alert("Fill Name and Password!");
+
     vaultData.passwords.push(acc);
     renderVault();
-    
+
     // Clear inputs after adding
     document.querySelectorAll('#vault .form-group input').forEach(i => i.value = "");
 }
@@ -153,9 +152,9 @@ function renderVault() {
     const list = document.getElementById('vaultList');
     const search = document.getElementById('searchVault').value.toLowerCase();
     list.innerHTML = "";
-    
+
     vaultData.passwords.forEach((item, index) => {
-        if(item.name.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search)) {
+        if (item.name.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search)) {
             list.innerHTML += `
             <div class="item-card">
                 <div class="card-header">
@@ -199,9 +198,8 @@ function togglePasswordVisibility(index, actualPassword) {
 // Added a Copy feature for convenience
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-        const btn = event.target;
-        const oldText = btn.innerText;
-        btn.innerText = "✓";
-        setTimeout(() => btn.innerText = oldText, 1000);
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
     });
 }
