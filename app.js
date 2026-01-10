@@ -108,3 +108,39 @@ async function exportData() {
     a.download = "my_vault_data.json";
     a.click();
 }
+
+function addAccount() {
+    const acc = {
+        name: document.getElementById('accName').value,
+        user: document.getElementById('accUser').value,
+        pass: document.getElementById('accPass').value,
+        desc: document.getElementById('accDesc').value, // NEW FIELD
+        where: document.getElementById('accWhere').value
+    };
+    
+    if(!acc.name || !acc.pass) return alert("Fill Name and Password!");
+    
+    vaultData.passwords.push(acc);
+    renderVault();
+    
+    // Clear inputs after adding
+    document.querySelectorAll('#vault .form-group input').forEach(i => i.value = "");
+}
+
+function renderVault() {
+    const list = document.getElementById('vaultList');
+    const search = document.getElementById('searchVault').value.toLowerCase();
+    list.innerHTML = "";
+    
+    vaultData.passwords.forEach((item, index) => {
+        if(item.name.toLowerCase().includes(search)) {
+            list.innerHTML += `<div class="item-card">
+                <strong>${item.name}</strong><br>
+                <small style="color:#aaa">${item.desc}</small><br>
+                User: ${item.user} | Pass: <code>${item.pass}</code><br>
+                <small>Used at: ${item.where}</small><br>
+                <button class="delete-btn" onclick="deleteItem('passwords', ${index})">Delete</button>
+            </div>`;
+        }
+    });
+}

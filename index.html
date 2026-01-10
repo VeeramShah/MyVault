@@ -10,14 +10,14 @@
     <div class="container">
         <h1>MyVault 🔒</h1>
         
-        <div id="login-section">
-            <p id="status-text">Enter Master Password to Unlock or Setup</p>
+        <div id="login-section" class="card">
+            <p id="status-text">Enter Master Password to Unlock</p>
             <input type="password" id="masterPassword" placeholder="Master Password">
-            <div class="file-input-group">
-                <label>Load your data file (if you have one):</label>
+            <div class="file-load-area">
+                <label>Load data file:</label>
                 <input type="file" id="importFile" accept=".json">
             </div>
-            <button onclick="unlockVault()">Unlock Vault</button>
+            <button onclick="unlockVault()" class="primary-btn">Unlock Vault</button>
         </div>
 
         <div id="mainContent" style="display: none;">
@@ -28,31 +28,37 @@
 
             <div class="action-bar">
                 <button class="save-btn" onclick="exportData()">💾 DOWNLOAD UPDATED VAULT</button>
-                <p><small>Note: After clicking, move the file to your 'data' folder.</small></p>
             </div>
 
             <div id="vault" class="tab-content">
-                <input type="text" id="searchVault" placeholder="Search accounts..." oninput="renderVault()">
+                <input type="text" id="searchVault" class="search-bar" placeholder="Search accounts..." oninput="renderVault()">
                 <div id="vaultList" class="list-container"></div>
-                <div class="form-box">
+                
+                <div class="card">
                     <h3>Add Account</h3>
-                    <input type="text" id="accName" placeholder="Account (e.g. Google)">
-                    <input type="text" id="accUser" placeholder="Username/Email">
-                    <input type="text" id="accPass" placeholder="Password">
-                    <input type="text" id="accWhere" placeholder="Where used?">
-                    <button onclick="addAccount()">Add to Vault</button>
+                    <div class="form-group">
+                        <input type="text" id="accName" placeholder="Account (e.g. Google)">
+                        <input type="text" id="accUser" placeholder="Username/Email">
+                        <input type="text" id="accPass" placeholder="Password">
+                        <input type="text" id="accDesc" placeholder="Description (e.g. Work account)">
+                        <input type="text" id="accWhere" placeholder="Where used?">
+                        <button onclick="addAccount()" class="primary-btn">Add to Vault</button>
+                    </div>
                 </div>
             </div>
 
             <div id="websites" class="tab-content" style="display:none;">
-                <input type="text" id="searchWeb" placeholder="Search tools..." oninput="renderWebsites()">
+                <input type="text" id="searchWeb" class="search-bar" placeholder="Search tools..." oninput="renderWebsites()">
                 <div id="websiteList" class="list-container"></div>
-                <div class="form-box">
+                
+                <div class="card">
                     <h3>Add Website</h3>
-                    <input type="text" id="webName" placeholder="Site Name">
-                    <input type="text" id="webUrl" placeholder="URL (https://...)">
-                    <input type="text" id="webCat" placeholder="Category (AI, Coding, etc.)">
-                    <button onclick="addWebsite()">Save Website</button>
+                    <div class="form-group">
+                        <input type="text" id="webName" placeholder="Site Name">
+                        <input type="text" id="webUrl" placeholder="URL (https://...)">
+                        <input type="text" id="webCat" placeholder="Category (AI, Coding, etc.)">
+                        <button onclick="addWebsite()" class="primary-btn">Save Website</button>
+                    </div>
                 </div>
             </div>
         </div>
