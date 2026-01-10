@@ -65,22 +65,44 @@ function addWebsite() {
     const web = {
         name: document.getElementById('webName').value,
         url: document.getElementById('webUrl').value,
-        cat: document.getElementById('webCat').value
+        cat: document.getElementById('webCat').value, // Gets the selected option
+        desc: document.getElementById('webDesc').value // Gets the new description
     };
+    
+    if(!web.name || !web.url || !web.cat) return alert("Please fill Name, URL, and Category!");
+    
     vaultData.websites.push(web);
     renderWebsites();
+    
+    // Clear the form
+    document.getElementById('webName').value = "";
+    document.getElementById('webUrl').value = "";
+    document.getElementById('webCat').value = "";
+    document.getElementById('webDesc').value = "";
 }
 
 function renderWebsites() {
     const list = document.getElementById('websiteList');
     const search = document.getElementById('searchWeb').value.toLowerCase();
     list.innerHTML = "";
+    
     vaultData.websites.forEach((item, index) => {
-        if(item.name.toLowerCase().includes(search)) {
-            list.innerHTML += `<div class="item-card">
-                <strong>${item.name}</strong> [${item.cat}]<br>
-                <a href="${item.url}" target="_blank" style="color: #c3e88d">${item.url}</a><br>
-                <button class="delete-btn" onclick="deleteItem('websites', ${index})">Delete</button>
+        if(item.name.toLowerCase().includes(search) || 
+           item.cat.toLowerCase().includes(search) || 
+           (item.desc && item.desc.toLowerCase().includes(search))) {
+            list.innerHTML += ` 
+            <div class="item-card">
+                <div class="card-header">
+                    <strong style="color: var(--primary); font-size: 1.1em;">${item.name}</strong>
+                    <span class="tag">${item.cat}</span>
+                </div>
+                <p style="font-size: 0.9em; color: #888; margin: 5px 0 10px 0;">${item.desc || 'No description'}</p>
+                <div class="credential-row">
+                    <a href="${item.url}" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9em;">
+                        🔗 Visit Website
+                    </a>
+                </div>
+                <button class="delete-btn" onclick="deleteItem('websites', index)" style="width: 100%; margin-top: 10px;">Delete</button>
             </div>`;
         }
     });
