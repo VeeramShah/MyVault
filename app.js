@@ -133,27 +133,28 @@ function renderVault() {
     list.innerHTML = "";
     
     vaultData.passwords.forEach((item, index) => {
-        if(item.name.toLowerCase().includes(search)) {
+        if(item.name.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search)) {
             list.innerHTML += `
             <div class="item-card">
                 <div class="card-header">
-                    <strong>${item.name}</strong>
-                    <small class="tag">${item.where || 'General'}</small>
+                    <strong style="font-size: 1.1em; color: var(--primary);">${item.name}</strong>
+                    <span class="tag">${item.where}</span>
                 </div>
-                <p class="desc-text">${item.desc || 'No description'}</p>
+                <p style="font-size: 0.9em; color: #888; margin: 5px 0 15px 0;">${item.desc}</p>
                 
                 <div class="credential-row">
                     <span>User: <strong>${item.user}</strong></span>
                 </div>
                 
-                <div class="credential-row">
-                    <span>Pass: </span>
+                <div class="credential-row" style="margin-top: 10px;">
                     <span id="pass-${index}" class="hidden-password">••••••••</span>
-                    <button class="toggle-btn" onclick="togglePasswordVisibility(${index}, '${item.pass}')">Show</button>
-                    <button class="copy-btn" onclick="copyToClipboard('${item.pass}')">Copy</button>
+                    <div style="display:flex; gap: 5px; margin-left: auto;">
+                        <button class="toggle-btn" onclick="togglePasswordVisibility(${index}, '${item.pass}')">Show</button>
+                        <button class="copy-btn" onclick="copyToClipboard('${item.pass}')">Copy</button>
+                    </div>
                 </div>
                 
-                <button class="delete-btn" onclick="deleteItem('passwords', ${index})">Delete</button>
+                <button class="delete-btn" onclick="deleteItem('passwords', ${index})" style="width: 100%; margin-top: 15px;">Delete Entry</button>
             </div>`;
         }
     });
@@ -166,11 +167,9 @@ function togglePasswordVisibility(index, actualPassword) {
 
     if (passSpan.innerText === '••••••••') {
         passSpan.innerText = actualPassword;
-        passSpan.classList.remove('hidden-password');
         btn.innerText = 'Hide';
     } else {
         passSpan.innerText = '••••••••';
-        passSpan.classList.add('hidden-password');
         btn.innerText = 'Show';
     }
 }
@@ -179,12 +178,8 @@ function togglePasswordVisibility(index, actualPassword) {
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "Copied!";
-        btn.style.background = "#c3e88d";
-        setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.background = "";
-        }, 1500);
+        const oldText = btn.innerText;
+        btn.innerText = "✓";
+        setTimeout(() => btn.innerText = oldText, 1000);
     });
 }

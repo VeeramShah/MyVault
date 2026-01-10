@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyVault - Offline</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <h1>MyVault 🔒</h1>
-        
+
         <div id="login-section" class="card">
             <p id="status-text">Enter Master Password to Unlock</p>
             <input type="password" id="masterPassword" placeholder="Master Password">
@@ -31,33 +33,47 @@
             </div>
 
             <div id="vault" class="tab-content">
-                <input type="text" id="searchVault" class="search-bar" placeholder="Search accounts..." oninput="renderVault()">
-                <div id="vaultList" class="list-container"></div>
-                
-                <div class="card">
-                    <h3>Add Account</h3>
-                    <div class="form-group">
-                        <input type="text" id="accName" placeholder="Account (e.g. Google)">
-                        <input type="text" id="accUser" placeholder="Username/Email">
-                        <input type="text" id="accPass" placeholder="Password">
-                        <input type="text" id="accDesc" placeholder="Description (e.g. Work account)">
-                        <input type="text" id="accWhere" placeholder="Where used?">
-                        <button onclick="addAccount()" class="primary-btn">Add to Vault</button>
+                <div class="content-grid">
+                    <div class="side-panel">
+                        <div class="card">
+                            <h3>Add Account</h3>
+                            <div class="form-group">
+                                <input type="text" id="accName" placeholder="Account (e.g. Google)">
+                                <input type="text" id="accUser" placeholder="Username/Email">
+                                <input type="text" id="accPass" placeholder="Password">
+                                <input type="text" id="accDesc" placeholder="Description">
+                                <input type="text" id="accWhere" placeholder="Where used?">
+                                <button onclick="addAccount()" class="primary-btn">Add to Vault</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-panel">
+                        <input type="text" id="searchVault" class="search-bar" placeholder="Search accounts..."
+                            oninput="renderVault()">
+                        <div id="vaultList" class="list-container"></div>
                     </div>
                 </div>
             </div>
 
             <div id="websites" class="tab-content" style="display:none;">
-                <input type="text" id="searchWeb" class="search-bar" placeholder="Search tools..." oninput="renderWebsites()">
-                <div id="websiteList" class="list-container"></div>
-                
-                <div class="card">
-                    <h3>Add Website</h3>
-                    <div class="form-group">
-                        <input type="text" id="webName" placeholder="Site Name">
-                        <input type="text" id="webUrl" placeholder="URL (https://...)">
-                        <input type="text" id="webCat" placeholder="Category (AI, Coding, etc.)">
-                        <button onclick="addWebsite()" class="primary-btn">Save Website</button>
+                <div class="content-grid">
+                    <div class="side-panel">
+                        <div class="card">
+                            <h3>Add Website</h3>
+                            <div class="form-group">
+                                <input type="text" id="webName" placeholder="Site Name">
+                                <input type="text" id="webUrl" placeholder="URL (https://...)">
+                                <input type="text" id="webCat" placeholder="Category">
+                                <button onclick="addWebsite()" class="primary-btn">Save Website</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-panel">
+                        <input type="text" id="searchWeb" class="search-bar" placeholder="Search tools..."
+                            oninput="renderWebsites()">
+                        <div id="websiteList" class="list-container"></div>
                     </div>
                 </div>
             </div>
@@ -66,4 +82,5 @@
     <script src="crypto.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
