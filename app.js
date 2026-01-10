@@ -134,13 +134,57 @@ function renderVault() {
     
     vaultData.passwords.forEach((item, index) => {
         if(item.name.toLowerCase().includes(search)) {
-            list.innerHTML += `<div class="item-card">
-                <strong>${item.name}</strong><br>
-                <small style="color:#aaa">${item.desc}</small><br>
-                User: ${item.user} | Pass: <code>${item.pass}</code><br>
-                <small>Used at: ${item.where}</small><br>
+            list.innerHTML += `
+            <div class="item-card">
+                <div class="card-header">
+                    <strong>${item.name}</strong>
+                    <small class="tag">${item.where || 'General'}</small>
+                </div>
+                <p class="desc-text">${item.desc || 'No description'}</p>
+                
+                <div class="credential-row">
+                    <span>User: <strong>${item.user}</strong></span>
+                </div>
+                
+                <div class="credential-row">
+                    <span>Pass: </span>
+                    <span id="pass-${index}" class="hidden-password">••••••••</span>
+                    <button class="toggle-btn" onclick="togglePasswordVisibility(${index}, '${item.pass}')">Show</button>
+                    <button class="copy-btn" onclick="copyToClipboard('${item.pass}')">Copy</button>
+                </div>
+                
                 <button class="delete-btn" onclick="deleteItem('passwords', ${index})">Delete</button>
             </div>`;
         }
+    });
+}
+
+// Function to reveal/hide the password
+function togglePasswordVisibility(index, actualPassword) {
+    const passSpan = document.getElementById(`pass-${index}`);
+    const btn = event.target;
+
+    if (passSpan.innerText === '••••••••') {
+        passSpan.innerText = actualPassword;
+        passSpan.classList.remove('hidden-password');
+        btn.innerText = 'Hide';
+    } else {
+        passSpan.innerText = '••••••••';
+        passSpan.classList.add('hidden-password');
+        btn.innerText = 'Show';
+    }
+}
+
+// Added a Copy feature for convenience
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "Copied!";
+        btn.style.background = "#c3e88d";
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "";
+        }, 1500);
     });
 }
