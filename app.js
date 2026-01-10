@@ -1,0 +1,110 @@
+let vaultData = { passwords: [], websites: [] };
+let currentPassword = "";
+
+async function unlockVault() {
+    const passInput = document.getElementById('masterPassword');
+    const fileInput = document.getElementById('importFile');
+    currentPassword = passInput.value;
+
+    if (!currentPassword) return alert("Enter a password!");
+
+    if (fileInput.files.length > 0) {
+        // Load existing file
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            try {
+                const decrypted = await decryptData(e.target.result, currentPassword);
+                vaultData = JSON.parse(decrypted);
+                showApp();
+            } catch (err) { alert("Wrong password or corrupted file!"); }
+        };
+        reader.readAsText(fileInput.files[0]);
+    } else {
+        // New Vault
+        if(confirm("No file selected. Create a new empty vault?")) showApp();
+    }
+}
+
+function showApp() {
+    document.getElementById('login-section').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    renderVault();
+    renderWebsites();
+}
+
+// VAULT LOGIC
+function addAccount() {
+    const acc = {
+        name: document.getElementById('accName').value,
+        user: document.getElementById('accUser').value,
+        pass: document.getElementById('accPass').value,
+        where: document.getElementById('accWhere').value
+    };
+    vaultData.passwords.push(acc);
+    renderVault();
+}
+
+function renderVault() {
+    const list = document.getElementById('vaultList');
+    const search = document.getElementById('searchVault').value.toLowerCase();
+    list.innerHTML = "";
+    vaultData.passwords.forEach((item, index) => {
+        if(item.name.toLowerCase().includes(search)) {
+            list.innerHTML += `<div class="item-card">
+                <strong>${item.name}</strong><br>
+                User: ${item.user} | Pass: <code>${item.pass}</code><br>
+                <small>Used at: ${item.where}</small><br>
+                <button class="delete-btn" onclick="deleteItem('passwords', ${index})">Delete</button>
+            </div>`;
+        }
+    });
+}
+
+// WEBSITE LOGIC
+function addWebsite() {
+    const web = {
+        name: document.getElementById('webName').value,
+        url: document.getElementById('webUrl').value,
+        cat: document.getElementById('webCat').value
+    };
+    vaultData.websites.push(web);
+    renderWebsites();
+}
+
+function renderWebsites() {
+    const list = document.getElementById('websiteList');
+    const search = document.getElementById('searchWeb').value.toLowerCase();
+    list.innerHTML = "";
+    vaultData.websites.forEach((item, index) => {
+        if(item.name.toLowerCase().includes(search)) {
+            list.innerHTML += `<div class="item-card">
+                <strong>${item.name}</strong> [${item.cat}]<br>
+                <a href="${item.url}" target="_blank" style="color: #c3e88d">${item.url}</a><br>
+                <button class="delete-btn" onclick="deleteItem('websites', ${index})">Delete</button>
+            </div>`;
+        }
+    });
+}
+
+function deleteItem(type, index) {
+    vaultData[type].splice(index, 1);
+    type === 'passwords' ? renderVault() : renderWebsites();
+}
+
+function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tab).style.display = 'block';
+    event.target.classList.add('active');
+}
+
+// CRITICAL: THE SAVE FUNCTION
+async function exportData() {
+    const encryptedStr = await encryptData(JSON.stringify(vaultData), currentPassword);
+    const blob = new Blob([encryptedStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "my_vault_data.json";
+    a.click();
+}

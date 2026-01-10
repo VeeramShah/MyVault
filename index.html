@@ -3,24 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyVault</title>
+    <title>MyVault - Offline</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>MyVault</h1>
-        <div class="tabs">
-            <button class="tab-button active" onclick="openTab('vault')">Password Vault</button>
-            <button class="tab-button" onclick="openTab('websites')">Website Saver</button>
+        <h1>MyVault 🔒</h1>
+        
+        <div id="login-section">
+            <p id="status-text">Enter Master Password to Unlock or Setup</p>
+            <input type="password" id="masterPassword" placeholder="Master Password">
+            <div class="file-input-group">
+                <label>Load your data file (if you have one):</label>
+                <input type="file" id="importFile" accept=".json">
+            </div>
+            <button onclick="unlockVault()">Unlock Vault</button>
         </div>
-        <div id="vault" class="tab-content" style="display: block;">
-            <p>Password Vault content will go here.</p>
-        </div>
-        <div id="websites" class="tab-content" style="display: none;">
-            <p>Website Saver content will go here.</p>
+
+        <div id="mainContent" style="display: none;">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('vault')">Passwords</button>
+                <button class="tab-btn" onclick="showTab('websites')">Websites</button>
+            </div>
+
+            <div class="action-bar">
+                <button class="save-btn" onclick="exportData()">💾 DOWNLOAD UPDATED VAULT</button>
+                <p><small>Note: After clicking, move the file to your 'data' folder.</small></p>
+            </div>
+
+            <div id="vault" class="tab-content">
+                <input type="text" id="searchVault" placeholder="Search accounts..." oninput="renderVault()">
+                <div id="vaultList" class="list-container"></div>
+                <div class="form-box">
+                    <h3>Add Account</h3>
+                    <input type="text" id="accName" placeholder="Account (e.g. Google)">
+                    <input type="text" id="accUser" placeholder="Username/Email">
+                    <input type="text" id="accPass" placeholder="Password">
+                    <input type="text" id="accWhere" placeholder="Where used?">
+                    <button onclick="addAccount()">Add to Vault</button>
+                </div>
+            </div>
+
+            <div id="websites" class="tab-content" style="display:none;">
+                <input type="text" id="searchWeb" placeholder="Search tools..." oninput="renderWebsites()">
+                <div id="websiteList" class="list-container"></div>
+                <div class="form-box">
+                    <h3>Add Website</h3>
+                    <input type="text" id="webName" placeholder="Site Name">
+                    <input type="text" id="webUrl" placeholder="URL (https://...)">
+                    <input type="text" id="webCat" placeholder="Category (AI, Coding, etc.)">
+                    <button onclick="addWebsite()">Save Website</button>
+                </div>
+            </div>
         </div>
     </div>
-    
     <script src="crypto.js"></script>
     <script src="app.js"></script>
 </body>

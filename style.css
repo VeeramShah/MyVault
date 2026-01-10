@@ -1,18 +1,28 @@
 body {
-    background-color: #121212;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: #0f111a;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex; justify-content: center; padding: 40px;
 }
-
-h1 {
-    color: #bb86fc;
+.container { width: 100%; max-width: 600px; text-align: center; }
+h1 { color: #82aaff; margin-bottom: 30px; }
+input {
+    width: 100%; padding: 12px; margin: 10px 0;
+    background: #1a1c25; border: 1px solid #333; color: white; border-radius: 5px;
 }
-
-p {
-    color: #cfcfcf;
+button {
+    background: #82aaff; color: #0f111a; border: none;
+    padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold;
 }
+button:hover { background: #6182cc; }
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab-btn { flex: 1; background: #232635; color: white; }
+.tab-btn.active { background: #82aaff; color: #0f111a; }
+.list-container { margin: 20px 0; text-align: left; }
+.item-card {
+    background: #1a1c25; padding: 15px; border-radius: 8px;
+    margin-bottom: 10px; border-left: 4px solid #82aaff;
+}
+.form-box { background: #161922; padding: 20px; border-radius: 10px; margin-top: 30px; }
+.save-btn { background: #c3e88d; width: 100%; margin-bottom: 20px; }
+.delete-btn { background: #ff5370; padding: 5px 10px; font-size: 12px; margin-top: 10px; }
