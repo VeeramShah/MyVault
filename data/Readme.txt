@@ -1,0 +1,1 @@
+Save your data files here in this folder / directory. And you can use this application as two user application too, just make two master passwords and save two files here and upload whatever you want to open.
