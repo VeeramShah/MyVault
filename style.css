@@ -130,7 +130,22 @@ input:focus {
     border-left: 4px solid var(--primary);
 }
 
-.delete-btn { background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-top: 10px; cursor: pointer; }
+.delete-btn {
+    flex: 1;         /* Forces it to take 50% width */
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 12px;   /* Matches Edit button size */
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0;   /* CRITICAL FIX: Removes the old misalignment */
+    text-align: center;
+}
+
+.delete-btn:hover {
+    background: #ff1f4b;
+}
 
 /* Styling for the hidden password text */
 .hidden-password {
@@ -215,3 +230,27 @@ input:focus {
     z-index: 1000;
 }
 .toast.show { top: 20px; } /* Slides down when shown */
+
+/* Styling for the new Edit Button */
+.edit-btn {
+    flex: 1;         /* Forces it to take 50% width */
+    background: #ffcb6b;
+    color: #0f111a;
+    border: none;
+    padding: 12px;   /* Bigger click area */
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+.edit-btn:hover {
+    background: #e6b455;
+}
+
+/* Ensure actions row is aligned */
+.card-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px; 
+}

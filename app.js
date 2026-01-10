@@ -1,5 +1,6 @@
 let vaultData = { passwords: [], websites: [] };
 let currentPassword = "";
+let editIndex = -1;
 
 async function unlockVault() {
     const passInput = document.getElementById('masterPassword');
@@ -38,23 +39,70 @@ function addAccount() {
         name: document.getElementById('accName').value,
         user: document.getElementById('accUser').value,
         pass: document.getElementById('accPass').value,
+        desc: document.getElementById('accDesc').value,
         where: document.getElementById('accWhere').value
     };
-    vaultData.passwords.push(acc);
+
+    if (!acc.name || !acc.pass) return alert("Fill Name and Password!");
+
+    // CHECK IF EDITING OR ADDING
+    if (editIndex > -1) {
+        vaultData.passwords[editIndex] = acc; // Update existing
+        editIndex = -1; // Reset mode
+        document.querySelector('#vault .primary-btn').innerText = "Add to Vault";
+    } else {
+        vaultData.passwords.push(acc); // Add new
+    }
+    
     renderVault();
+    // Clear inputs
+    document.querySelectorAll('#vault input').forEach(i => i.value = "");
+}
+
+// NEW FUNCTION: Populates the form with existing data
+function editAccount(index) {
+    const acc = vaultData.passwords[index];
+    document.getElementById('accName').value = acc.name;
+    document.getElementById('accUser').value = acc.user;
+    document.getElementById('accPass').value = acc.pass;
+    document.getElementById('accDesc').value = acc.desc || "";
+    document.getElementById('accWhere').value = acc.where;
+    
+    editIndex = index;
+    document.querySelector('#vault .primary-btn').innerText = "Update Account";
 }
 
 function renderVault() {
     const list = document.getElementById('vaultList');
     const search = document.getElementById('searchVault').value.toLowerCase();
     list.innerHTML = "";
+    
     vaultData.passwords.forEach((item, index) => {
         if (item.name.toLowerCase().includes(search)) {
-            list.innerHTML += `<div class="item-card">
-                <strong>${item.name}</strong><br>
-                User: ${item.user} | Pass: <code>${item.pass}</code><br>
-                <small>Used at: ${item.where}</small><br>
-                <button class="delete-btn" onclick="deleteItem('passwords', ${index})">Delete</button>
+            list.innerHTML += `
+            <div class="item-card">
+                <div class="card-header">
+                    <strong style="font-size: 1.1em; color: var(--primary);">${item.name}</strong>
+                    <span class="tag">${item.where}</span>
+                </div>
+                <p class="desc-text">${item.desc || ''}</p>
+                
+                <div class="credential-row">
+                    <span>User: <strong>${item.user}</strong></span>
+                </div>
+                
+                <div class="credential-row" style="margin-top: 10px;">
+                    <span id="pass-${index}" class="hidden-password">••••••••</span>
+                    <div style="display:flex; gap: 5px; margin-left: auto;">
+                        <button class="toggle-btn" onclick="togglePasswordVisibility(${index}, '${item.pass}')">Show</button>
+                        <button class="copy-btn" onclick="copyToClipboard('${item.pass}')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="card-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="edit-btn" onclick="editAccount(${index})">Edit</button>
+                    <button class="delete-btn" onclick="deleteItem('passwords', ${index})" style="flex:1;">Delete</button>
+                </div>
             </div>`;
         }
     });
@@ -65,20 +113,36 @@ function addWebsite() {
     const web = {
         name: document.getElementById('webName').value,
         url: document.getElementById('webUrl').value,
-        cat: document.getElementById('webCat').value, // Gets the selected option
-        desc: document.getElementById('webDesc').value // Gets the new description
+        cat: document.getElementById('webCat').value,
+        desc: document.getElementById('webDesc').value
     };
 
-    if (!web.name || !web.url || !web.cat) return alert("Please fill Name, URL, and Category!");
+    if (!web.name || !web.url || !web.cat) return alert("Fill Name, URL, and Category!");
 
-    vaultData.websites.push(web);
+    // CHECK IF EDITING OR ADDING
+    if (editIndex > -1) {
+        vaultData.websites[editIndex] = web;
+        editIndex = -1;
+        document.querySelector('#websites .primary-btn').innerText = "Save Website";
+    } else {
+        vaultData.websites.push(web);
+    }
+    
     renderWebsites();
+    // Clear inputs
+    document.querySelectorAll('#websites input, #websites select').forEach(i => i.value = "");
+}
 
-    // Clear the form
-    document.getElementById('webName').value = "";
-    document.getElementById('webUrl').value = "";
-    document.getElementById('webCat').value = "";
-    document.getElementById('webDesc').value = "";
+// NEW FUNCTION: Populates form with website data
+function editWebsite(index) {
+    const web = vaultData.websites[index];
+    document.getElementById('webName').value = web.name;
+    document.getElementById('webUrl').value = web.url;
+    document.getElementById('webCat').value = web.cat;
+    document.getElementById('webDesc').value = web.desc || "";
+    
+    editIndex = index;
+    document.querySelector('#websites .primary-btn').innerText = "Update Website";
 }
 
 function renderWebsites() {
@@ -87,9 +151,7 @@ function renderWebsites() {
     list.innerHTML = "";
 
     vaultData.websites.forEach((item, index) => {
-        if (item.name.toLowerCase().includes(search) ||
-            item.cat.toLowerCase().includes(search) ||
-            (item.desc && item.desc.toLowerCase().includes(search))) {
+        if (item.name.toLowerCase().includes(search) || item.cat.toLowerCase().includes(search)) {
             list.innerHTML += ` 
             <div class="item-card">
                 <div class="card-header">
@@ -101,7 +163,10 @@ function renderWebsites() {
                     <a href="${item.url}" target="_blank" class="accent-link">🔗 Visit</a>
                     <button class="copy-btn" onclick="copyToClipboard('${item.url}')">Copy URL</button>
                 </div>
-                <button class="delete-btn" onclick="deleteItem('websites', index)" style="width: 100%; margin-top: 10px;">Delete</button>
+                <div class="card-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="edit-btn" onclick="editWebsite(${index})">Edit</button>
+                    <button class="delete-btn" onclick="deleteItem('websites', ${index})" style="flex:1;">Delete</button>
+                </div>
             </div>`;
         }
     });
@@ -128,57 +193,6 @@ async function exportData() {
     a.href = url;
     a.download = "my_vault_data.json";
     a.click();
-}
-
-function addAccount() {
-    const acc = {
-        name: document.getElementById('accName').value,
-        user: document.getElementById('accUser').value,
-        pass: document.getElementById('accPass').value,
-        desc: document.getElementById('accDesc').value, // NEW FIELD
-        where: document.getElementById('accWhere').value
-    };
-
-    if (!acc.name || !acc.pass) return alert("Fill Name and Password!");
-
-    vaultData.passwords.push(acc);
-    renderVault();
-
-    // Clear inputs after adding
-    document.querySelectorAll('#vault .form-group input').forEach(i => i.value = "");
-}
-
-function renderVault() {
-    const list = document.getElementById('vaultList');
-    const search = document.getElementById('searchVault').value.toLowerCase();
-    list.innerHTML = "";
-
-    vaultData.passwords.forEach((item, index) => {
-        if (item.name.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search)) {
-            list.innerHTML += `
-            <div class="item-card">
-                <div class="card-header">
-                    <strong style="font-size: 1.1em; color: var(--primary);">${item.name}</strong>
-                    <span class="tag">${item.where}</span>
-                </div>
-                <p style="font-size: 0.9em; color: #888; margin: 5px 0 15px 0;">${item.desc}</p>
-                
-                <div class="credential-row">
-                    <span>User: <strong>${item.user}</strong></span>
-                </div>
-                
-                <div class="credential-row" style="margin-top: 10px;">
-                    <span id="pass-${index}" class="hidden-password">••••••••</span>
-                    <div style="display:flex; gap: 5px; margin-left: auto;">
-                        <button class="toggle-btn" onclick="togglePasswordVisibility(${index}, '${item.pass}')">Show</button>
-                        <button class="copy-btn" onclick="copyToClipboard('${item.pass}')">Copy</button>
-                    </div>
-                </div>
-                
-                <button class="delete-btn" onclick="deleteItem('passwords', ${index})" style="width: 100%; margin-top: 15px;">Delete Entry</button>
-            </div>`;
-        }
-    });
 }
 
 // Function to reveal/hide the password
