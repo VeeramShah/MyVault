@@ -31,6 +31,8 @@ function showApp() {
     document.getElementById('mainContent').style.display = 'block';
     renderVault();
     renderWebsites();
+    
+    startAutoLogout();
 }
 
 // VAULT LOGIC
@@ -279,4 +281,51 @@ function performPasswordChange() {
         }
     };
     reader.readAsText(fileInput.files[0]);
+}
+
+
+// --- LOGOUT & SECURITY SYSTEM ---
+
+let logoutTimer;
+
+function startAutoLogout() {
+    // Stop any existing timer first
+    clearTimeout(logoutTimer);
+    
+    // Set interactions that reset the timer
+    window.onload = resetTimer;
+    window.onmousemove = resetTimer;
+    window.onmousedown = resetTimer; // Catches touchscreen taps too
+    window.onkeydown = resetTimer;
+    window.onscroll = resetTimer;
+}
+
+function resetTimer() {
+    // Only run this if the vault is actually open
+    if (document.getElementById('mainContent').style.display === 'block') {
+        clearTimeout(logoutTimer);
+        // Set timer for 2 minutes (2 * 60 * 1000 milliseconds)
+        logoutTimer = setTimeout(logout, 2 * 60 * 1000); 
+    }
+}
+
+function logout() {
+    // 1. Clear sensitive data from memory
+    vaultData = { passwords: [], websites: [] };
+    currentPassword = "";
+    
+    // 2. Clear the UI lists
+    document.getElementById('vaultList').innerHTML = "";
+    document.getElementById('websiteList').innerHTML = "";
+    
+    // 3. Hide App, Show Login
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('login-section').style.display = 'block';
+    
+    // 4. Reset Inputs
+    document.getElementById('masterPassword').value = "";
+    document.getElementById('importFile').value = ""; // Clear file selection
+    
+    // 5. Show Feedback
+    alert("Vault locked due to inactivity or logout.");
 }

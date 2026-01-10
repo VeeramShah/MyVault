@@ -381,3 +381,25 @@ input:focus {
     padding-top: 10px;
     border-top: 1px solid #232635; /* Subtle divider line */
 }
+
+/* Fixed Logout Button at Top Right */
+.logout-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ff5370; /* Red color for attention */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px; /* Pill shape */
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 83, 112, 0.4);
+    z-index: 1000; /* Ensures it sits on top of everything */
+    transition: transform 0.2s;
+}
+
+.logout-btn:hover {
+    transform: scale(1.05);
+    background: #ff3c5e;
+}
