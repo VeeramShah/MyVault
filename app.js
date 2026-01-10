@@ -217,3 +217,66 @@ function copyToClipboard(text) {
         setTimeout(() => toast.classList.remove('show'), 2000);
     });
 }
+
+// --- LOGIN SCREEN FEATURES ---
+
+// 1. Toggle Password Visibility (Eye Icon)
+function toggleLoginPass(inputId) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
+}
+
+// 2. Switch between Unlock and Change Password modes
+function toggleMode() {
+    const unlockMode = document.getElementById('unlock-mode');
+    const changeMode = document.getElementById('change-mode');
+    
+    if (unlockMode.style.display === "none") {
+        unlockMode.style.display = "block";
+        changeMode.style.display = "none";
+    } else {
+        unlockMode.style.display = "none";
+        changeMode.style.display = "block";
+    }
+}
+
+// 3. Logic to Change Master Password
+function performPasswordChange() {
+    const fileInput = document.getElementById('changeFile');
+    const oldPass = document.getElementById('oldPass').value;
+    const newPass = document.getElementById('newPass').value;
+
+    if (fileInput.files.length === 0) return alert("Please select your current data file!");
+    if (!oldPass || !newPass) return alert("Please fill in both passwords!");
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            // Step 1: Try to unlock with OLD password
+            const decrypted = await decryptData(e.target.result, oldPass);
+            const data = JSON.parse(decrypted);
+
+            // Step 2: Re-encrypt with NEW password
+            const encryptedStr = await encryptData(JSON.stringify(data), newPass);
+            
+            // Step 3: Download immediately
+            const blob = new Blob([encryptedStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "my_vault_NEW_PASSWORD.json";
+            a.click();
+            
+            alert("Success! Your password has been changed.\n\nIMPORTANT: Delete your old file and use the new downloaded file.");
+            location.reload(); // Refresh to go back to start
+            
+        } catch (err) {
+            alert("Incorrect 'Current Password'. Cannot decrypt file.");
+        }
+    };
+    reader.readAsText(fileInput.files[0]);
+}

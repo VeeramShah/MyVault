@@ -13,13 +13,55 @@
         <h1>MyVault 🔒</h1>
 
         <div id="login-section" class="card">
-            <p id="status-text">Enter Master Password to Unlock</p>
-            <input type="password" id="masterPassword" placeholder="Master Password">
-            <div class="file-load-area">
-                <label>Load data file:</label>
-                <input type="file" id="importFile" accept=".json">
+
+            <div id="unlock-mode">
+                <h3 style="margin-bottom: 10px;">Unlock Vault</h3>
+                <p id="status-text" style="margin-bottom: 20px; color: #888;">Enter Master Password to Unlock</p>
+
+                <div class="password-wrapper">
+                    <input type="password" id="masterPassword" placeholder="Master Password">
+                    <button class="eye-btn" onclick="toggleLoginPass('masterPassword')">👁️</button>
+                </div>
+
+                <div class="file-load-area">
+                    <label>Load data file:</label>
+                    <input type="file" id="importFile" accept=".json">
+                </div>
+
+                <button onclick="unlockVault()" class="primary-btn">Unlock Vault</button>
+
+                <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                    Want to change your password? <a href="#" onclick="toggleMode()"
+                        style="color: var(--primary);">Click here</a>
+                </p>
             </div>
-            <button onclick="unlockVault()" class="primary-btn">Unlock Vault</button>
+
+            <div id="change-mode" style="display: none;">
+                <h3 style="margin-bottom: 10px;">Change Password</h3>
+                <p style="margin-bottom: 20px; color: #888;">Re-encrypt your vault with a new key</p>
+
+                <div class="file-load-area">
+                    <label>1. Select current vault file:</label>
+                    <input type="file" id="changeFile" accept=".json">
+                </div>
+
+                <div class="password-wrapper">
+                    <input type="password" id="oldPass" placeholder="Current Password">
+                    <button class="eye-btn" onclick="toggleLoginPass('oldPass')">👁️</button>
+                </div>
+
+                <div class="password-wrapper">
+                    <input type="password" id="newPass" placeholder="New Password">
+                    <button class="eye-btn" onclick="toggleLoginPass('newPass')">👁️</button>
+                </div>
+
+                <button onclick="performPasswordChange()" class="primary-btn"
+                    style="background: #ffcb6b; color: #000;">Update & Download</button>
+
+                <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                    <a href="#" onclick="toggleMode()" style="color: var(--primary);">← Back to Unlock</a>
+                </p>
+            </div>
         </div>
 
         <div id="mainContent" style="display: none;">

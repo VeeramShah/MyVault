@@ -254,3 +254,33 @@ input:focus {
     gap: 15px;
     margin-top: 20px; 
 }
+
+/* Password Field Wrapper */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Make space for the eye icon */
+.password-wrapper input {
+    padding-right: 40px; 
+}
+
+/* The Eye Button */
+.eye-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0;
+    color: #888;
+}
+
+.eye-btn:hover {
+    color: white;
+}
