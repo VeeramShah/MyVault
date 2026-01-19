@@ -181,12 +181,19 @@ input:focus {
     align-items: flex-start;
 }
 
+/* UPDATED TAG STYLING */
 .tag {
     background: #232635;
-    padding: 2px 8px;
+    padding: 4px 8px;      /* Slightly more breathing room inside */
     border-radius: 4px;
     font-size: 10px;
     text-transform: uppercase;
+    
+    /* NEW PROPERTIES FOR SPACING */
+    display: inline-block; /* Allows the margin to work properly */
+    margin-top: 6px;       /* Adds the gap between Title and Tag */
+    vertical-align: middle;
+    letter-spacing: 0.5px; /* Makes the small caps easier to read */
 }
 
 /* Toggle and Copy Buttons */
@@ -402,4 +409,29 @@ input:focus {
 .logout-btn:hover {
     transform: scale(1.05);
     background: #ff3c5e;
+}
+
+/* --- LOGO STYLING --- */
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Aligns logo with text */
+    gap: 10px;
+}
+
+/* Container for Title + Logo */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.site-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px; /* Soft rounded corners */
+    object-fit: contain; /* Ensures logo doesn't stretch */
+    background: #fff; /* White bg helps transparent logos pop on dark theme */
+    padding: 2px; /* Small padding inside the white box */
 }

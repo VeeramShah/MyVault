@@ -74,6 +74,29 @@ function editAccount(index) {
     document.querySelector('#vault .primary-btn').innerText = "Update Account";
 }
 
+
+// HELPER: Generates a logo URL from a name or URL
+function getLogoUrl(input) {
+    if (!input) return "https://www.google.com/s2/favicons?domain=default"; // Fallback
+
+    let domain = input.toLowerCase().trim();
+
+    // 1. Remove protocol (https://) and www.
+    domain = domain.replace(/^(https?:\/\/)?(www\.)?/, '');
+
+    // 2. Remove paths (e.g., google.com/mail -> google.com)
+    domain = domain.split('/')[0];
+
+    // 3. Smart Guessing: If no dot exists (e.g. user typed "Netflix"), add .com
+    if (!domain.includes('.')) {
+        domain += ".com";
+    }
+
+    // Return Google's Favicon Service URL (sz=64 asks for a higher res image)
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+}
+
+
 function renderVault() {
     const list = document.getElementById('vaultList');
     const search = document.getElementById('searchVault').value.toLowerCase();
@@ -81,12 +104,22 @@ function renderVault() {
     
     vaultData.passwords.forEach((item, index) => {
         if (item.name.toLowerCase().includes(search)) {
+            // LOGIC: Use 'where' field for logo (e.g., "Gmail"), fallback to 'name'
+            const logoSource = item.name;
+            const logoUrl = getLogoUrl(logoSource);
+
             list.innerHTML += `
             <div class="item-card">
                 <div class="card-header">
-                    <strong style="font-size: 1.1em; color: var(--primary);">${item.name}</strong>
-                    <span class="tag">${item.where}</span>
+                    <div class="header-left">
+                        <img src="${logoUrl}" class="site-logo" onerror="this.src='https://www.google.com/s2/favicons?domain=default'">
+                        <div>
+                            <strong style="font-size: 1.1em; color: var(--primary); display:block;">${item.name}</strong>
+                            <span class="tag" style="font-size: 0.8em; opacity: 0.8;">${item.where}</span>
+                        </div>
+                    </div>
                 </div>
+                
                 <p class="desc-text">${item.desc || ''}</p>
                 
                 <div class="credential-row">
@@ -154,12 +187,19 @@ function renderWebsites() {
 
     vaultData.websites.forEach((item, index) => {
         if (item.name.toLowerCase().includes(search) || item.cat.toLowerCase().includes(search)) {
+            // LOGIC: Use the actual URL for the logo
+            const logoUrl = getLogoUrl(item.url);
+
             list.innerHTML += ` 
             <div class="item-card">
                 <div class="card-header">
-                    <strong style="color: var(--primary); font-size: 1.1em;">${item.name}</strong>
+                    <div class="header-left">
+                        <img src="${logoUrl}" class="site-logo" onerror="this.src='https://www.google.com/s2/favicons?domain=default'">
+                        <strong style="color: var(--primary); font-size: 1.1em;">${item.name}</strong>
+                    </div>
                     <span class="tag">${item.cat}</span>
                 </div>
+                
                 <p style="font-size: 0.9em; color: #888; margin: 5px 0 10px 0;">${item.desc || 'No description'}</p>
                 <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
                     <a href="${item.url}" target="_blank" class="accent-link">🔗 Visit</a>
