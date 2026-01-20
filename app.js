@@ -9,20 +9,52 @@ async function unlockVault() {
 
     if (!currentPassword) return alert("Enter a password!");
 
+    // Check if file is selected
     if (fileInput.files.length > 0) {
-        // Load existing file
         const reader = new FileReader();
         reader.onload = async (e) => {
             try {
-                const decrypted = await decryptData(e.target.result, currentPassword);
+                const fileContent = e.target.result;
+
+                // CHECK 1: Is the file actually a JSON file?
+                try {
+                    JSON.parse(fileContent);
+                } catch (e) {
+                    throw new Error("NOT_JSON");
+                }
+
+                // CHECK 2: Try to Decrypt
+                let decrypted;
+                try {
+                    decrypted = await decryptData(fileContent, currentPassword);
+                } catch (e) {
+                    throw new Error("WRONG_PASS");
+                }
+
+                // CHECK 3: Is the decrypted data valid?
+                if (!decrypted) throw new Error("DECRYPT_EMPTY");
+                
                 vaultData = JSON.parse(decrypted);
                 showApp();
-            } catch (err) { alert("Wrong password or corrupted file!"); }
+
+            } catch (err) {
+                // Give specific error messages
+                if (err.message === "NOT_JSON") {
+                    alert("ERROR: The file you selected is NOT a valid vault file.\n\nDid you accidentally select 'index.html' or an image?");
+                } else if (err.message === "WRONG_PASS") {
+                    alert("ERROR: Incorrect Password.\n\nPlease check Caps Lock and try again.");
+                } else {
+                    alert("CRITICAL ERROR: File appears corrupted.\n" + err);
+                }
+                // Do NOT open the app if there is an error
+            }
         };
         reader.readAsText(fileInput.files[0]);
     } else {
-        // New Vault
-        if (confirm("No file selected. Create a new empty vault?")) showApp();
+        // Only create new vault if user explicitly agrees
+        if (confirm("⚠️ NO FILE SELECTED.\n\nDo you want to create a brand new, empty vault?\n(Click Cancel if you meant to load a backup)")) {
+            showApp();
+        }
     }
 }
 
