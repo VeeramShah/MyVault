@@ -451,3 +451,64 @@ input:focus {
     background: #fff; /* White bg helps transparent logos pop on dark theme */
     padding: 2px; /* Small padding inside the white box */
 }
+
+/* --- MOBILE IMPROVEMENTS --- */
+
+/* 1. By default (Desktop), hide the toggle button */
+.mobile-toggle-btn {
+    display: none;
+}
+
+/* 2. Mobile Specific Styles */
+@media (max-width: 800px) {
+    
+    /* FIX: Stop the form from overlapping the list */
+    .content-grid {
+        flex-direction: column;
+    }
+    .side-panel {
+        position: static; /* Removes sticky behavior */
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .main-panel {
+        width: 100%;
+    }
+
+    /* SHOW the toggle button on mobile */
+    .mobile-toggle-btn {
+        display: block;
+        width: 100%;
+        background: #232635; /* Dark gray */
+        color: var(--primary); /* Blue text */
+        border: 1px dashed var(--primary);
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.2s;
+    }
+
+    .mobile-toggle-btn:hover {
+        background: #2c3042;
+    }
+
+    /* HIDE the form cards by default on mobile */
+    #vault-form, #web-form {
+        display: none;
+    }
+
+    /* SHOW the form when this class is added via JS */
+    #vault-form.show-mobile, #web-form.show-mobile {
+        display: block;
+        animation: slideDown 0.3s ease-out;
+    }
+}
+
+/* Slide animation for smooth opening */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

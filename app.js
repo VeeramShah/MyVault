@@ -59,6 +59,8 @@ function addAccount() {
     renderVault();
     // Clear inputs
     document.querySelectorAll('#vault input').forEach(i => i.value = "");
+
+    if(document.getElementById('vault-form')) document.getElementById('vault-form').classList.remove('show-mobile');
 }
 
 // NEW FUNCTION: Populates the form with existing data
@@ -167,6 +169,8 @@ function addWebsite() {
     renderWebsites();
     // Clear inputs
     document.querySelectorAll('#websites input, #websites select').forEach(i => i.value = "");
+
+    if(document.getElementById('web-form')) document.getElementById('web-form').classList.remove('show-mobile');
 }
 
 // NEW FUNCTION: Populates form with website data
@@ -369,4 +373,17 @@ function logout() {
     
     // 5. Show Feedback
     alert("Vault locked due to inactivity or logout.");
+}
+
+// --- MOBILE UI UTILS ---
+
+function toggleMobileForm(formId) {
+    const form = document.getElementById(formId);
+    
+    // Toggle the class 'show-mobile'
+    if (form.classList.contains('show-mobile')) {
+        form.classList.remove('show-mobile');
+    } else {
+        form.classList.add('show-mobile');
+    }
 }
