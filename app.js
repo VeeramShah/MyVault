@@ -105,7 +105,8 @@ function renderVault() {
     vaultData.passwords.forEach((item, index) => {
         if (item.name.toLowerCase().includes(search)) {
             // LOGIC: Use 'where' field for logo (e.g., "Gmail"), fallback to 'name'
-            const logoSource = item.name;
+            // Removes spaces so "Chase Bank" becomes "chasebank.com"
+            const logoSource = item.name.replace(/\s+/g, '');
             const logoUrl = getLogoUrl(logoSource);
 
             list.innerHTML += `

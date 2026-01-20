@@ -48,13 +48,29 @@ body {
 }
 
 /* Mobile responsive: Stack them if screen is small */
+/* Mobile responsive: Stack them if screen is small */
 @media (max-width: 800px) {
     .content-grid {
         flex-direction: column;
     }
-    .side-panel, .main-panel {
+    
+    /* FIX: Stop the form from sticking on mobile */
+    .side-panel {
+        width: 100%;
+        position: static; /* Removes sticky behavior */
+        margin-bottom: 20px; /* Adds space between form and list */
+    }
+
+    .main-panel {
         width: 100%;
     }
+    
+    /* Improve mobile padding */
+    .container {
+        padding: 10px;
+    }
+    
+    /* Make the Add Account card collapsible on mobile? (Optional later) */
 }
 
 /* Aesthetic tweaks for the list cards */
