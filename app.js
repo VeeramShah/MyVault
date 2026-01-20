@@ -136,10 +136,13 @@ function renderVault() {
     const search = document.getElementById('searchVault').value.toLowerCase();
     list.innerHTML = "";
     
+    let foundCount = 0; // Track how many items we found
+
     vaultData.passwords.forEach((item, index) => {
         if (item.name.toLowerCase().includes(search)) {
-            // LOGIC: Use 'where' field for logo (e.g., "Gmail"), fallback to 'name'
-            // Removes spaces so "Chase Bank" becomes "chasebank.com"
+            foundCount++; // Found one!
+            
+            // Logic for Logo
             const logoSource = item.name.replace(/\s+/g, '');
             const logoUrl = getLogoUrl(logoSource);
 
@@ -165,7 +168,7 @@ function renderVault() {
                     <span id="pass-${index}" class="hidden-password">••••••••</span>
                     <div style="display:flex; gap: 5px; margin-left: auto;">
                         <button class="toggle-btn" onclick="togglePasswordVisibility(${index}, '${item.pass}')">Show</button>
-                        <button class="copy-btn" onclick="copyToClipboard('${item.pass}')">Copy</button>
+                        <button class="copy-btn" onclick="copyToClipboard('${item.pass}', this)">Copy</button>
                     </div>
                 </div>
                 
@@ -176,6 +179,17 @@ function renderVault() {
             </div>`;
         }
     });
+
+    // NEW: Empty State Logic
+    if (foundCount === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <span class="empty-icon">📭</span>
+                <p>No accounts found matching "${search}"</p>
+                <button onclick="document.getElementById('accName').focus()" style="margin-top:10px; background:none; border:none; color:var(--primary); cursor:pointer;">+ Add New?</button>
+            </div>
+        `;
+    }
 }
 
 // WEBSITE LOGIC
@@ -222,9 +236,11 @@ function renderWebsites() {
     const search = document.getElementById('searchWeb').value.toLowerCase();
     list.innerHTML = "";
 
+    let foundCount = 0;
+
     vaultData.websites.forEach((item, index) => {
         if (item.name.toLowerCase().includes(search) || item.cat.toLowerCase().includes(search)) {
-            // LOGIC: Use the actual URL for the logo
+            foundCount++;
             const logoUrl = getLogoUrl(item.url);
 
             list.innerHTML += ` 
@@ -240,7 +256,7 @@ function renderWebsites() {
                 <p style="font-size: 0.9em; color: #888; margin: 5px 0 10px 0;">${item.desc || 'No description'}</p>
                 <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
                     <a href="${item.url}" target="_blank" class="accent-link">🔗 Visit</a>
-                    <button class="copy-btn" onclick="copyToClipboard('${item.url}')">Copy URL</button>
+                    <button class="copy-btn" onclick="copyToClipboard('${item.url}', this)">Copy URL</button>
                 </div>
                 <div class="card-actions" style="margin-top: 15px; display: flex; gap: 10px;">
                     <button class="edit-btn" onclick="editWebsite(${index})">Edit</button>
@@ -249,6 +265,16 @@ function renderWebsites() {
             </div>`;
         }
     });
+
+    // NEW: Empty State Logic
+    if (foundCount === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <span class="empty-icon">🌐</span>
+                <p>No websites found matching "${search}"</p>
+            </div>
+        `;
+    }
 }
 
 function deleteItem(type, index) {
@@ -289,11 +315,29 @@ function togglePasswordVisibility(index, actualPassword) {
 }
 
 // Added a Copy feature for convenience
-function copyToClipboard(text) {
+// UPDATED: Now supports button animation!
+function copyToClipboard(text, btn) {
     navigator.clipboard.writeText(text).then(() => {
+        
+        // 1. Show the Toast (existing feature)
         const toast = document.getElementById('toast');
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2000);
+
+        // 2. Animate the Button (NEW)
+        if (btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "✓"; // Change text to checkmark
+            btn.style.color = "#c3e88d"; // Turn green (Accent color)
+            btn.style.borderColor = "#c3e88d";
+            
+            // Revert after 2 seconds
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.color = "";
+                btn.style.borderColor = "";
+            }, 2000);
+        }
     });
 }
 

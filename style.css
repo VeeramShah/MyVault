@@ -512,3 +512,22 @@ input:focus {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* --- EMPTY STATE STYLING --- */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    border: 2px dashed #232635; /* Subtle dashed border */
+    border-radius: 12px;
+    margin-top: 10px;
+    background: rgba(35, 38, 53, 0.3);
+}
+
+.empty-icon {
+    font-size: 2.5rem; /* Big icon */
+    margin-bottom: 15px;
+    display: block;
+    opacity: 0.5;
+    filter: grayscale(100%);
+}
